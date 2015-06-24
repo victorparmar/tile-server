@@ -1,48 +1,61 @@
+
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html>
+<head>
+	<title>Node.js vector tile server</title>
+	<meta charset="utf-8" />
 
-<title>Node.js vector tile server</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+	<link rel="stylesheet" href="/css/leaflet.css" />
 
-<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="js/TileLayer.d3_geoJSON.js"></script>
+  <style>
 
-<style>
+  html, body, #map
+  {
+  	height: 100%;
+  	width:100%;
+  }
 
-html, body, #map
-{
-	height: 100%;
-	width:100%;
-}
+  body
+  {
+  	padding: 0;
+  	margin: 0;
+  }
 
-body
-{
-	padding: 0;
-	margin: 0;
-}
+  .style {
+  	stroke : rgb(128, 0, 255);
+  	fill : none;
+  }
 
-.style {
-	stroke : rgb(128, 0, 255);
-	fill : none;
-}
+  </style>
 
-</style>
+  <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/TileLayer.d3_geoJSON.js"></script>
 
+</head>
 <body>
+	<div id="map"></div>
 
-<div id="map"></div>
+	<script>
 
-<script>
+		map = L.map(map).setView([47.5542, 7.5805], 15);
+    map._initPathRoot();
 
-	map = L.map(map).setView([47.5542, 7.5805], 15);
-	map._initPathRoot();
+    new L.TileLayer.d3_geoJSON('http://localhost:9001/tiles/vector/{z}/{x}/{y}',{class:"style"}).addTo(map);
 
-	new L.TileLayer.d3_geoJSON('http://localhost:9001/tiles/vector/{z}/{x}/{y}',{class:"style"}).addTo(map);
+		var popup = L.popup();
 
-	// new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 0, maxZoom: 18, attribution: 'Map data © OpenStreetMap contributors'}).addTo(map);
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(map);
+		}
 
-</script>
+		map.on('click', onMapClick);
 
+	</script>
 </body>
+</html>
