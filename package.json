@@ -1,0 +1,14 @@
+{
+	"name": "tile-server",
+	"description": "teralytics tile-server",
+	"version": "0.0.1",
+	"dependencies": {
+		"express" : "4.x",
+		"body-parser" : "*",
+		"morgan" : "*",
+		"errorhandler" : "*",
+		"winston" : "*",
+		"bluebird" : "2.x",
+		"pg-promise" : "*"
+	}
+}
