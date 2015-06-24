@@ -2,6 +2,11 @@
 
 This is a basic implementation of a node.js based vector tile server with data being served out of a postgis db
 
+# DB
+
+    ogrinfo -al -so PG:"dbname=teralytics user=vicpostgres password=vicpostgres host=localhost" -sql "SELECT * from ch_2po_4pgr"
+
+
 # TODO
 
 * unit tests

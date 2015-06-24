@@ -1,6 +1,6 @@
 {
 	"name": "tile-server",
-	"description": "teralytics tile-server",
+	"description": "vector geoJSON tile-server",
 	"version": "0.0.1",
 	"dependencies": {
 		"express" : "4.x",
