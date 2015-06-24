@@ -9,6 +9,7 @@
 		"errorhandler" : "*",
 		"winston" : "*",
 		"bluebird" : "2.x",
-		"pg-promise" : "*"
+		"pg-promise" : "*",
+		"node-cache" : "*"
 	}
 }

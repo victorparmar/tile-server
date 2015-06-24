@@ -19,6 +19,7 @@ var Promise = require('bluebird');
 
 var logger = require('./lib/logger.js').logger;
 var db = require('./lib/db.js')('production', logger);
+var cache = require('./lib/cache.js')('production', logger);
 var cors = require('./lib/cors');
 
 //
@@ -110,37 +111,6 @@ var parseResult = function (result) {
 				feature.geometry = JSON.parse(result[r].geometry);
 			}
 
-			// TODO: figure out properties
-			/*
-			var properties = {};
-
-			if (result[r].properties) {
-
-		    var propertiesArray = result[r].properties.split(',');
-
-				for (var p = 0; p < propertiesArray.length; p++) {
-
-					var keyvalue = propertiesArray[p].split('=>');
-
-					if (keyvalue[0] && keyvalue[1]) {
-						try {
-							properties[JSON.parse(keyvalue[0])] = JSON.parse(keyvalue[1]);
-						} catch (error){
-							logger.error('Error parsing properties [ ' + keyvalue[0] + ' : ' + keyvalue[1] + ' ] - ' + error);
-						}
-					}
-				}
-			}
-
-			feature.properties = properties;
-
-	    for (var i in result[r]) {
-	      if (i != 'geometry' && i != 'properties') {
-	        feature.properties[i] = result[r][i];
-	      }
-	    }
-			*/
-
 			features.push(feature);
 		}
 
@@ -162,11 +132,6 @@ function init()
 	// app routes
 	//
 
-	//
-	// pre-compile
-	//
-
-
 	app.use(express.static(__dirname + '/public'));
 
 	//
@@ -177,6 +142,12 @@ function init()
 		res.send('yo');
 	});
 
+	api.get('/stats/cache', function (req, res, next) {
+
+		res.send(cache.getStats());
+		
+	});
+
 	api.get('/tiles/vector/:z/:x/:y', function (req, res, next) {
 
 		try {
@@ -185,9 +156,16 @@ function init()
 			var x = parseInt(req.params.x);
 			var y = parseInt(req.params.y);
 
-			var box = getLTRBbox(z, x, y);
+			var key = z + '-' + x + '-' + y;
 
-			// res.send([z, x, y, box]);
+			var c = cache.get(key);
+
+			if (c) {
+				res.send(c);
+				return;
+			}
+
+			var box = getLTRBbox(z, x, y);
 
 			db.getTileData(box.left, box.top, box.right, box.bottom)
 				.then(function (data) {
@@ -196,7 +174,10 @@ function init()
 
 				})
 				.then(function (featureCollection) {
+
+					cache.set(key, featureCollection);
 					res.send(featureCollection);
+
 				})
 				.catch(function (err) {
 					logger.error(err);

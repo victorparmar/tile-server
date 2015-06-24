@@ -45,6 +45,8 @@
 
     new L.TileLayer.d3_geoJSON('http://localhost:9001/tiles/vector/{z}/{x}/{y}',{class:"style"}).addTo(map);
 
+		// new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 0, maxZoom: 18, attribution: 'Map data © OpenStreetMap contributors'}).addTo(map);
+
 		var popup = L.popup();
 
 		function onMapClick(e) {
