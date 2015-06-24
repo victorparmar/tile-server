@@ -10,6 +10,7 @@
 		"winston" : "*",
 		"bluebird" : "2.x",
 		"pg-promise" : "*",
-		"node-cache" : "*"
+		"node-cache" : "*",
+		"chai" : "*"
 	}
 }

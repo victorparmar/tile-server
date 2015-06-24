@@ -9,12 +9,14 @@ This is a basic implementation of a node.js based vector tile server with data b
 
 # TODO
 
-* unit tests
- * db module
- * api routes
 * performance
  * data caching via an external cache for improved scalability (redis?)
  * hardcode geometry extent to skip querying db for tiles outside scope
 * feature
  * raster tile service (via mapnik?)
  * login system
+
+# Links
+
+- https://github.com/mapnik/node-mapnik-sample-code/blob/master/tile/database/app.js
+- http://www.azavea.com/blogs/labs/2015/05/converting-mapbox-studio-vector-tiles-to-rasters/

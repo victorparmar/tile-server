@@ -21,6 +21,7 @@ var logger = require('./lib/logger.js').logger;
 var db = require('./lib/db.js')('production', logger);
 var cache = require('./lib/cache.js')('production', logger);
 var cors = require('./lib/cors');
+var util = require('./lib/util');
 
 //
 // static config
@@ -68,30 +69,7 @@ api.use(cors.allowAll);
 
 // http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#ECMAScript_.28JavaScript.2FActionScript.2C_etc..29
 
-function tile2lon(zoom, x) {
-	return (x / Math.pow(2, zoom) * 360 - 180);
-}
 
-function tile2lat(zoom, y) {
-	var n = Math.PI - (2 * Math.PI * y) / Math.pow(2, zoom);
-	return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
-}
-
-var getLTRBbox = function (zoom, x, y) {
-
-	var top = tile2lat(zoom, y);
-	var bottom = tile2lat(zoom, y+1);
-	var left = 	tile2lon(zoom, x);
-	var right = tile2lon(zoom, x+1);
-
-	return {
-		left: left,
-		top: top,
-		right: right,
-		bottom: bottom
-	};
-
-}
 
 var parseResult = function (result) {
 
@@ -145,7 +123,7 @@ function init()
 	api.get('/stats/cache', function (req, res, next) {
 
 		res.send(cache.getStats());
-		
+
 	});
 
 	api.get('/tiles/vector/:z/:x/:y', function (req, res, next) {
@@ -165,7 +143,7 @@ function init()
 				return;
 			}
 
-			var box = getLTRBbox(z, x, y);
+			var box = util.getLTRBbox(z, x, y);
 
 			db.getTileData(box.left, box.top, box.right, box.bottom)
 				.then(function (data) {
