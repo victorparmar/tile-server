@@ -89,9 +89,7 @@ var parseResult = function (result) {
   });
 }
 
-//
-// setup
-//
+
 
 function init()
 {
@@ -180,10 +178,6 @@ function init()
     res.status(500).send();
 
   });
-
-  //
-  // setup
-  //
 
   var app_http = app.listen(app_port);
   logger.info('app listening on ' + app_port);
