@@ -43,7 +43,6 @@ var api = express();
 // app middleware
 //
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 if ('development' == env) {
@@ -59,16 +58,8 @@ api.use(morgan('dev'));
 api.use(cors.allowAll);
 
 //
-// pre-processing
+// util
 //
-
-//
-// local
-//
-
-// http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#ECMAScript_.28JavaScript.2FActionScript.2C_etc..29
-
-
 
 var parseResult = function (result) {
 
@@ -211,7 +202,6 @@ function init()
 exports.app = app;
 exports.api = api;
 exports.db = db;
-// exports.config = config;
 
 exports.init = init;
 
